@@ -3,12 +3,14 @@ dotenv.config({
   path: require("path").resolve(__dirname, "../.env"),
 });
 
+require('dotenv').config();
+
 import AWS from "aws-sdk";
 
 // AWS s3 bucket config
  const s3Bucket = new AWS.S3({
-  accessKeyId: "AKIAZ677NUY2TI5FZL64",
-  secretAccessKey: "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",
+  accessKeyId: process.env.AWS_S3_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_S3_SECRET_KEY,
   region: "ap-south-1",
 });
 
