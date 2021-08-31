@@ -9,6 +9,7 @@ import passport from "passport";
 
 //configs
 import googleAuthConfig from "./config/google.config"
+import routeConfig from "./config/route.config"
 
 //microservice routes
 import Auth from "./API/Auth";
@@ -36,6 +37,7 @@ zomato.use(passport.session());
 
 //passport config
 googleAuthConfig(passport);
+routeConfig(passport);
 
 //application routes
 zomato.use("/auth", Auth);
