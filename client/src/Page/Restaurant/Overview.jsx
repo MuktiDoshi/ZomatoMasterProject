@@ -5,23 +5,54 @@ import Slider from 'react-slick';
 import { NextArrow, PrevArrow } from '../../Components/CarousalArrow';
 import ReactStars from "react-rating-stars-component";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import {MdContentCopy} from "react-icons/md";
+import {FaDirections} from "react-icons/fa";
 
 //components
 import MenuCollection from '../../Components/Restaurant/MenuCollection';
 import MenuSimilarRestaurantCard from '../../Components/Restaurant/MenuSimilarRestaurantCard';
 import ReviewCard from '../../Components/Restaurant/Reviews/ReviewCard';
+import Mapview from '../../Components/Restaurant/Mapview';
+
 
 const Overview = () => {
     const {id} = useParams();
     const settings = {
         arrows: true,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 3,
         slidesToScroll: 1,
-        nextArrow: <NextArrow/>,
-        prevArrow: <PrevArrow/>,
-      };    
+        initialSlide: 0,
+        nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />,
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 3,
+              infinite: true,
+              dots: true,
+            },
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              initialSlide: 2,
+            },
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            },
+          },
+        ],
+      };
 
       const ratingChanged = (newRating) => {
         console.log(newRating);
@@ -108,6 +139,16 @@ const Overview = () => {
                          activeColor="#ffd700"
                     />
                     </div>
+                    <div className="my-4 w-full md:hidden flex flex-col gap-4">
+                    <Mapview 
+                    title="Parivar Veg Restaurant"
+                    phno="+912228555335"
+                    mapLocation={[19.273607003041118, 72.86307818872021]}
+                    address="1-5, Poonam Sagar Complex, 
+                            Cooperative Housing Society, Sector 9, 
+                            Mira Road, Mumbai"
+                    />
+                    </div>
                     <div className="my-4 flex flex-col gap-4">
                         <ReviewCard/>
                         <ReviewCard/>
@@ -116,31 +157,15 @@ const Overview = () => {
                 </div>
                 <aside 
                 style={{height: "fit-content"}} 
-                className="hidden md:block md:w-4/12 sticky rounded-xl top-2 bg-white p-3 shadow-md">
-                   <div>
-                    <h4 className="text-xl font-base">
-                        Call
-                    </h4>
-                    <h5 className="text-zomato-300 font-base">+912228555335</h5>
-                   </div>
-                   <div>
-                    <h4 className="text-xl font-base">
-                        Direction
-                    </h4>
-                   <div className="w-full h-48">
-                   <MapContainer center={[19.273607003041118, 72.86307818872021]} zoom={13} scrollWheelZoom={false}>
-                    <TileLayer
-                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker position={[19.273607003041118, 72.86307818872021]}>
-                      <Popup>
-                      A pretty CSS3 popup. <br /> Easily customizable.
-                      </Popup>
-                   </Marker>
-                   </MapContainer>
-                   </div>
-                   </div>
+                className="hidden md:flex md:w-4/12 sticky rounded-xl top-2 bg-white p-3 shadow-md flex flex-col gap-4">
+                   <Mapview 
+                   title="Parivar Veg Restaurant"
+                   phno="+912228555335"
+                   mapLocation={[19.273607003041118, 72.86307818872021]}
+                   address="1-5, Poonam Sagar Complex, 
+                            Cooperative Housing Society, Sector 9, 
+                            Mira Road, Mumbai"
+                   />
                 </aside>
             </div>
         </>
