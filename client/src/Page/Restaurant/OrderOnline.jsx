@@ -35,31 +35,7 @@ const OrderOnline = () => {
                                  image: "https://b.zmtcdn.com/data/dish_photos/396/e4edf762307aea7fff5bf1609b8e8396.jpg?output-format=webp"
                              },                           
                         ]}
-                        />
-                        <FoodList
-                         title="Main Course"
-                         items= {[
-                             {   
-                                 price: "220",
-                                 rating: 4,
-                                 title: "Paneer Butter Masala",
-                                 description:"Lorem ipsum dolor sit amet consectetur adipisicing elit Vero sit et porro enim a!Ratione labore laudantium adipisci veritatis?Tempora rem culpa atque voluptatum, dolor cum laboriosam quis magni ut",
-                                 image: "https://b.zmtcdn.com/data/dish_photos/396/e4edf762307aea7fff5bf1609b8e8396.jpg?output-format=webp"
-                             },                           
-                        ]}
-                        />
-                        <FoodList
-                         title="Biryani"
-                         items= {[
-                             {   
-                                 price: "220",
-                                 rating: 4,
-                                 title: "Paneer Butter Masala",
-                                 description:"Lorem ipsum dolor sit amet consectetur adipisicing elit Vero sit et porro enim a!Ratione labore laudantium adipisci veritatis?Tempora rem culpa atque voluptatum, dolor cum laboriosam quis magni ut",
-                                 image: "https://b.zmtcdn.com/data/dish_photos/396/e4edf762307aea7fff5bf1609b8e8396.jpg?output-format=webp"
-                             },                           
-                        ]}
-                        />
+                        />                      
                     </section>
                 </div>
             </div>
