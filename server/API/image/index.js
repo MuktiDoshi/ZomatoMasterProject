@@ -15,6 +15,24 @@ const upload = multer({storage});
 
 const Router = express.Router();
 
+/*
+Route     /
+Des       Get Image details
+Params    _id
+Access    Public
+Method    GET  
+*/
+Router.get("/:_id", async (req, res) => {
+    try {
+      const image = await ImageModel.findById(req.params._id);
+  
+      return res.json({ image });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+  
+
 /* 
 Route - /
 Descript - upload given image to S3 bucket, 
@@ -37,6 +55,8 @@ Router.post("/", upload.single("file"), async (req, res) => {
         };
 
         const uploadImage = await s3Upload(bucketOptions);
+
+        await ImageModel.create({images: [{location: uploadImage.Location}]});
         
         return res.status(200).json({uploadImage});
     
