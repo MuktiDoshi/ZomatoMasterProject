@@ -28,8 +28,8 @@ export default function SignIn({isOpen, setIsOpen}) {
     dispatch(signIn(userData));
   };
 
-
-
+  const googlesignin = () =>
+  (window.location.href = "http://localhost:4000/auth/google");
 
   return (
     <>
@@ -77,7 +77,9 @@ export default function SignIn({isOpen, setIsOpen}) {
                  
                 </Dialog.Title>
                 <div className="mt-2 flex flex-col gap-3 w-full">
-                  <button className=" justify-center flex items-center rounded-lg gap-2 py-2 w-full border border-gray-400 bg-white text-gray-700 hover:bg-gray-100">
+                  <button 
+                  onClick={googlesignin} 
+                  className=" justify-center flex items-center rounded-lg gap-2 py-2 w-full border border-gray-400 bg-white text-gray-700 hover:bg-gray-100">
                       Signin with google <FcGoogle/>
                   </button>
                   <form className="flex flex-col gap-4">
