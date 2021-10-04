@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { useParams } from 'react-router';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { TiStarOutline } from "react-icons/ti";
 import { RiDirectionLine, RiShareForwardLine } from 'react-icons/ri';
 import { BiBookmarkPlus } from 'react-icons/bi';
@@ -12,27 +15,48 @@ import InfoButtons from '../Components/Restaurant/InfoButtons';
 import TabConatiner from '../Components/Restaurant/Tabs';
 import CartContainer from '../Components/Cart/CartContainer';
 
+//redux actions
+import { getSpecificRestaurant } from '../Redux/Reducer/restaurant/restaurant.action';
+import { getImage } from '../Redux/Reducer/Image/Image.action';
+
 const RestaurantLayout = (props) => {
+    const [restaurant, setRestaurant] = useState({
+        images: [],
+        name: "",
+        cuising: "",
+        address: "",
+      });    
+
+    const { id } = useParams();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(getSpecificRestaurant(id)).then((data) => {
+        setRestaurant((prev) => ({
+          ...prev,
+          ...data.payload.restaurant,
+        }));
+  
+        dispatch(getImage(data.payload.restaurant.photos)).then((data) =>
+          setRestaurant((prev) => ({ ...prev, ...data.payload.image }))
+        );
+      });
+  
+    
+  }, []);
+
 
     return (
         <>
         <RestaurantNavbar/>
         <div className="container mx-auto px-4 lg:px-20">
-            <ImageGrid images={[
-                "https://b.zmtcdn.com/data/pictures/7/32337/e3c01f24185cc794ba2d9df4c54478ab.jpg",
-                "https://b.zmtcdn.com/data/pictures/7/32337/e3c01f24185cc794ba2d9df4c54478ab.jpg",
-                "https://b.zmtcdn.com/data/pictures/7/32337/e3c01f24185cc794ba2d9df4c54478ab.jpg",
-                "https://b.zmtcdn.com/data/pictures/7/32337/e3c01f24185cc794ba2d9df4c54478ab.jpg",
-                "https://b.zmtcdn.com/data/pictures/7/32337/e3c01f24185cc794ba2d9df4c54478ab.jpg"
-
-            ]}
-            />
+        <ImageGrid images={restaurant.images} />
             <RestaurantInfo 
-            name="Parivar Veg Restaurant"
-            restaurantRating = "3.4"
-            deliveryRating = "4.0"
-            cuisine = "Chinese, Fast Food, North Indian, South Indian, Pizza, Sandwich, Biryani, Beverages"
-            address= "Mira Road, Mumbai"
+            name={restaurant?.name}
+            restaurantRating={restaurant?.rating || 0}
+            deliveryRating={restaurant?.rating || 0}
+            cuisine={restaurant?.cuising}
+            address={restaurant?.address}  
             />
             <div className="my-4 flex flex-wrap gap-3">
                 <InfoButtons isActive> 

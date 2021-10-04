@@ -1,20 +1,48 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from "react-redux"
 import {AiOutlineCompass} from "react-icons/ai";
 import {BiTimeFive} from "react-icons/bi";
 
 //components
 import FloatMenuBtn from '../../Components/Restaurant/Order-Online/FloatMenuBtn';
 import MenuListContainer from '../../Components/Restaurant/Order-Online/MenuListContainer';
-import FoodItem from '../../Components/Restaurant/Order-Online/FoodItem';
 import FoodList from '../../Components/Restaurant/Order-Online/FoodList';
 
+import { getFoodList } from '../../Redux/Reducer/Food/Food.action';
+
 const OrderOnline = () => {
+    const [menu, setMenu] = useState([]);
+    const [selected, setSelected] = useState("");
+    const onClickHandler = (e) => {
+        if(e.target.id){
+            setSelected(e.target.id)
+        }
+        return;
+    };
+
+    const reduxState = useSelector((globalStore) => 
+    globalStore.restaurant.selectedRestaurant.restaurant)
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+       reduxState && dispatch(getFoodList(reduxState.menu)).then((data) => 
+        setMenu(data.payload.menus.menus)
+        )
+       
+    },
+     [reduxState])
+
     return (
         <>
             <div className="w-full h-screen flex">
                 <aside className="hidden md:flex flex-col gap-3 border-r border-gray-200 h-screen overflow-y-scroll  w-1/4">
-                    <MenuListContainer/>
-                    <MenuListContainer/>
+                    {
+                        menu.map((item) => (
+                            <MenuListContainer {...item} key={item._id} 
+                            onClickHandler={onClickHandler} selected={selected} />
+                        ))
+                    }
                 </aside>
                 <div className="w-full px-3 md:w-3/4">
                     <div className="pl-3 mb-4">
@@ -24,18 +52,9 @@ const OrderOnline = () => {
                     </h4>
                     </div>                   
                     <section className="flex flex-col h-screen overflow-y-scroll gap-3 md:gap-5">
-                        <FoodList
-                         title="Recommended"
-                         items= {[
-                             {   
-                                 price: "220",
-                                 rating: 4,
-                                 title: "Paneer Butter Masala",
-                                 description:"Lorem ipsum dolor sit amet consectetur adipisicing elit Vero sit et porro enim a!Ratione labore laudantium adipisci veritatis?Tempora rem culpa atque voluptatum, dolor cum laboriosam quis magni ut",
-                                 image: "https://b.zmtcdn.com/data/dish_photos/396/e4edf762307aea7fff5bf1609b8e8396.jpg?output-format=webp"
-                             },                           
-                        ]}
-                        />                      
+                        {menu.map((item) => (
+                            <FoodList key={item._id} {...item}/>
+                        ))}                    
                     </section>
                 </div>
             </div>

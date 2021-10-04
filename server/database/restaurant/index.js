@@ -24,10 +24,10 @@ const RestaurantSchema = new mongoose.Schema({
         type : mongoose.Types.ObjectId,
         ref : "Reviews",
     }],
-    photos : [{
+    photos :{
         type : mongoose.Types.ObjectId,
         ref : "Images",
-    }],
+    },
 },
 {
     timestamps : true,

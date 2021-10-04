@@ -1,12 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { IoMdArrowDropright } from "react-icons/io";
 import Slider from 'react-slick';
 import { NextArrow, PrevArrow } from '../../Components/CarousalArrow';
 import ReactStars from "react-rating-stars-component";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import {MdContentCopy} from "react-icons/md";
-import {FaDirections} from "react-icons/fa";
+import {useSelector, useDispatch} from "react-redux";
 
 //components
 import MenuCollection from '../../Components/Restaurant/MenuCollection';
@@ -14,8 +12,14 @@ import MenuSimilarRestaurantCard from '../../Components/Restaurant/MenuSimilarRe
 import ReviewCard from '../../Components/Restaurant/Reviews/ReviewCard';
 import Mapview from '../../Components/Restaurant/Mapview';
 
+import { getImage } from '../../Redux/Reducer/Image/Image.action';
+import { getReviews } from '../../Redux/Reducer/Reviews/review.action';
+
 
 const Overview = () => {
+     const [menuImage, setMenuImages] = useState({images: []})
+     const [Reviews, setReviewss] = useState([]);
+
     const {id} = useParams();
     const settings = {
         arrows: true,
@@ -54,9 +58,35 @@ const Overview = () => {
         ],
       };
 
+
+      const reduxState = useSelector((globalStore) => 
+        globalStore.restaurant.selectedRestaurant.restaurant);
+
+        const dispatch = useDispatch();
+
+        useEffect(() => {
+          if(reduxState) {
+            dispatch(getImage(reduxState?.menuImage)).then((data) =>{
+              const images = [];
+              data.payload.image.images.map(({location}) => 
+              images.push(location))
+              setMenuImages(images);
+            } 
+           );
+           dispatch(getReviews(reduxState?._id)).then((data) =>
+           setReviewss(data.payload.reviews)   
+           )
+          }
+        }, []);
+
       const ratingChanged = (newRating) => {
         console.log(newRating);
       };
+
+      const getLatLong = (mapAddress) => {
+        return mapAddress?.split(",").map((item) => parseFloat(item));
+      };
+    
 
     return (
         <>
@@ -77,24 +107,20 @@ const Overview = () => {
                             <MenuCollection 
                             menuTitle="Menu" 
                             pages="10"
-                            image={["https://b.zmtcdn.com/data/menus/337/32337/f426a69636a2694e869991af864c45e7.jpg"]}
+                            image={menuImage}
                             />
                     </div>
                     <h4 className="text-lg font-medium my-4">Cuisines</h4>
                     <div className="flex flex-wrap gap-2">
-                        <span className="border border-gray-400 text-blue-500 px-2 py-1 rounded-full">
-                            North Indian
-                        </span>
-                        <span className="border border-gray-400 text-blue-500 px-2 py-1 rounded-full">
-                            North Indian
-                        </span>
-                        <span className="border border-gray-400 text-blue-500 px-2 py-1 rounded-full">
-                            North Indian
-                        </span>
+                            {reduxState?.cuisine.map((data) =>( <span 
+                          className="border border-gray-400 text-blue-500 px-2 py-1 rounded-full">
+                            {data}
+                        </span>) )}
+                        
                     </div>
                     <div className="my-4">
                        <h4 className="text-lg font-medium">Average Cost</h4>
-                       <h6>₹1,000 for two people (approx.)</h6>
+                       <h6>₹{reduxState?.averageCost} for two people (approx.)</h6>
                         <small className="text-gray-500">
                            Exclusive of applicable taxes and charges, if any
                         </small>
@@ -138,15 +164,15 @@ const Overview = () => {
                          size={24}
                          activeColor="#ffd700"
                     />
+                    {Reviews.map((reviewData) =>( <ReviewCard
+                    {...reviewData}/>))}
                     </div>
                     <div className="my-4 w-full md:hidden flex flex-col gap-4">
                     <Mapview 
-                    title="Parivar Veg Restaurant"
-                    phno="+912228555335"
-                    mapLocation={[19.273607003041118, 72.86307818872021]}
-                    address="1-5, Poonam Sagar Complex, 
-                            Cooperative Housing Society, Sector 9, 
-                            Mira Road, Mumbai"
+                    title={reduxState?.name}
+                    phno={`+91${reduxState?.contactNumber}`}
+                    mapLocation={getLatLong(reduxState?.mapLocation)}
+                    address={reduxState?.address}
                     />
                     </div>
                     <div className="my-4 flex flex-col gap-4">
@@ -158,14 +184,12 @@ const Overview = () => {
                 <aside 
                 style={{height: "fit-content"}} 
                 className="hidden md:flex md:w-4/12 sticky rounded-xl top-2 bg-white p-3 shadow-md flex flex-col gap-4">
-                   <Mapview 
-                   title="Parivar Veg Restaurant"
-                   phno="+912228555335"
-                   mapLocation={[19.273607003041118, 72.86307818872021]}
-                   address="1-5, Poonam Sagar Complex, 
-                            Cooperative Housing Society, Sector 9, 
-                            Mira Road, Mumbai"
-                   />
+                    <Mapview 
+                    title={reduxState?.name}
+                    phno={`+91${reduxState?.contactNumber}`}
+                    mapLocation={getLatLong(reduxState?.mapLocation)}
+                    address={reduxState?.address}
+                    />
                 </aside>
             </div>
         </>
