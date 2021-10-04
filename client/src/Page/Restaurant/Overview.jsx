@@ -68,7 +68,7 @@ const Overview = () => {
           if(reduxState) {
             dispatch(getImage(reduxState?.menuImage)).then((data) =>{
               const images = [];
-              data.payload.image.images.map(({location}) => 
+              data.payload.image?.images.map(({location}) => 
               images.push(location))
               setMenuImages(images);
             } 
@@ -164,7 +164,7 @@ const Overview = () => {
                          size={24}
                          activeColor="#ffd700"
                     />
-                    {Reviews.map((reviewData) =>( <ReviewCard
+                    {Reviews?.map((reviewData) =>( <ReviewCard
                     {...reviewData}/>))}
                     </div>
                     <div className="my-4 w-full md:hidden flex flex-col gap-4">

@@ -2,7 +2,35 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import {FcGoogle} from "react-icons/fc";
 
+import { useDispatch } from "react-redux";
+import { signUp } from "../../Redux/Reducer/Auth/Auth.action";
+
+
 export default function SignUp ({isOpen, setIsOpen}) {
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+    fullname: "",
+  });
+
+  const dispatch = useDispatch();
+
+  const handleChange = (e) =>
+    setUserData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  const submit = () => {
+    setUserData({
+      email: "",
+      password: "",
+      fullname: "",
+    });
+    dispatch(signUp(userData));
+  };
+
 
   function closeModal() {
     setIsOpen(false);
@@ -63,6 +91,8 @@ export default function SignUp ({isOpen, setIsOpen}) {
                         <input 
                         type="text" 
                         id="fullname" 
+                        onChange={handleChange}
+                        value={userData.fullname}
                         placeholder="John Doe" 
                         className="w-full border border-gray-400 px-3 py-2 rounded-lg focus:outline-none focus:border-zomato-300"
                         />
@@ -72,6 +102,8 @@ export default function SignUp ({isOpen, setIsOpen}) {
                         <input 
                         type="email" 
                         id="email" 
+                        onChange={handleChange}
+                        value={userData.email}
                         placeholder="email@email.com" 
                         className="w-full border border-gray-400 px-3 py-2 rounded-lg focus:outline-none focus:border-zomato-300"
                         />
@@ -81,11 +113,15 @@ export default function SignUp ({isOpen, setIsOpen}) {
                         <input 
                         type="password" 
                         id="password" 
+                        onChange={handleChange}
+                        value={userData.password}
                         placeholder="*******" 
                         className="w-full border border-gray-400 px-3 py-2 rounded-lg focus:outline-none focus:border-zomato-300"
                         />
                     </div>
-                    <div className="w-full text-center bg-zomato-300 text-white py-2 rounded-lg">
+                    <div 
+                    onClick={submit}
+                     className="w-full text-center bg-zomato-300 text-white py-2 rounded-lg">
                         Sign up
                     </div>
                   </form>
