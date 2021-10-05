@@ -86,7 +86,9 @@ const CartContainer = () => {
 
     return (
         <> 
-        {isOpen && (
+        {reduxState.length && (
+            <> 
+             {isOpen && (
         <div className="fixed w-full overflow-y-scroll h-48 bg-white z-30 bottom-16 px-3 ">
             <div className="flex items-center justify-between md:px-20">
             <h3 className="text-xl fonyt-semibold">Your Orders</h3>
@@ -98,19 +100,21 @@ const CartContainer = () => {
             {
                 reduxState.map((food) =>  
                 (<FoodItem
-                name={food.name}
-                quantity={food.quantity}
-                price={food.price}
+               
+                key={food._id}
+                {...food}
                 />)
                 ) 
             }
             </div>
         </div>
-        )} {reduxState.length && (
-            <div className="fixed w-full bg-white z-30 bottom-0 p-2 px-3">
+        )}
+        <div className="fixed w-full bg-white z-30 bottom-0 p-2 px-3">
                 <CartSm toggle={toggleCart}/>
                 <CartLg toggle={toggleCart}/>
             </div>
+            </>
+            
         ) }
             
         </>
