@@ -9,6 +9,7 @@ import MenuListContainer from '../../Components/Restaurant/Order-Online/MenuList
 import FoodList from '../../Components/Restaurant/Order-Online/FoodList';
 
 import { getFoodList } from '../../Redux/Reducer/Food/Food.action';
+import { addCart } from '../../Redux/Reducer/Cart/Cart.action';
 
 const OrderOnline = () => {
     const [menu, setMenu] = useState([]);
