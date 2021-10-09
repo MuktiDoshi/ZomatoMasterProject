@@ -23,7 +23,7 @@ after_success:
  - docker push muktidoshi/zomato-master-nginx
 
 deploy:
- #deploy to AWS EBS
+ #deploy to AWS EBS 
  provider: elasticbeanstalk
  region: ap-south-1
  app: Zomato_clone
